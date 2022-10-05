@@ -11,4 +11,7 @@ package fr.insa.maury.projetbdd;
  */
 public class test {
     
+    public static void main(String[] args){
+        System.out.println("coucou");
+    }
 }
