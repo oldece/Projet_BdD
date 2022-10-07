@@ -15,6 +15,4 @@ public class test {
         System.out.println("coucou");
     }
 }
-
-EHHHHHHEHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-        
+robin t'es bô
