@@ -58,7 +58,7 @@ public class Utilisateur{
                         prenom varchar(30) not null,
                         pass varchar(20) not null,
                         codepos varchar(5) not null,
-                        mail varchar(100) not null unique,
+                        mail varchar(100) not null unique
                     )
                     """);
             // si j'arrive jusqu'ici, c'est que tout s'est bien passÃ©
@@ -207,30 +207,20 @@ public class Utilisateur{
         } 
     }
     
-    public static void main(String[] args) {
-        String a;
-        try ( Connection con = defautConnect()) {
-            System.out.println("connecté !!!");
-            creeUtilisateur(con);
-        } catch (Exception ex) {
-            throw new Error(ex);
+     public static void afficheTousLesUtilisateur(Connection con) throws SQLException {
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from utilisateur")) {
+                System.out.println("liste des utilisateurs :");
+                System.out.println("------------------------");
+                while (tlu.next()) {
+                    int id = tlu.getInt("id");
+                    String nom = tlu.getString(2);
+                    String pass = tlu.getString(3);
+                    System.out.println(id + " : " + nom + " (" + pass + ")");
+                }
+            }
         }
-//        System.out.println("Voulez vous ajoutez un utilisateur ? oui/non");
-//        a=Lire.S();
-//        if(a=="oui"){
-//            try ( Connection con = defautConnect()) {
-//                System.out.println("connecté !!!");
-//                demandenouvelutilisateur(con);
-//            } catch (Exception ex) {
-//                throw new Error(ex);
-//            }
-//        }
-//        try ( Connection con = defautConnect()){
-//        deleteUtilisateur(con);
-//        System.out.println("Schema bien detruit");
-//        } catch (Exception ex) {
-//            throw new Error(ex);
-//        }
+
     }
 }
 
