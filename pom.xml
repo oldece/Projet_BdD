@@ -9,5 +9,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
+        <exec.mainClass>fr.insa.maury.projetbdd.Encheres</exec.mainClass>
     </properties>
+    <dependencies>
+<dependency>
+<groupId>org.postgresql</groupId>
+<artifactId>postgresql</artifactId>
+<version>42.5.0</version>
+</dependency>
+</dependencies>
 </project>
