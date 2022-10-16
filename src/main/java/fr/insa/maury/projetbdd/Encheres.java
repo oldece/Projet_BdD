@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Utilisateur{
+public class Encheres{
     
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
