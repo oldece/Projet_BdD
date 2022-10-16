@@ -58,7 +58,8 @@ public class Utilisateur{
                         prenom varchar(30) not null,
                         pass varchar(20) not null,
                         codepos varchar(5) not null,
-                        mail varchar(100) not null unique
+                        mail varchar(100) not null unique,
+                        administrateur int not null
                     )
                     """);
             // si j'arrive jusqu'ici, c'est que tout s'est bien passÃ©
@@ -135,7 +136,7 @@ public class Utilisateur{
     }
 
     
-    public static int createUtilisateur(Connection con, String nom, String pass, String mail, String codepos, String prenom)
+    public static int createUtilisateur(Connection con, String nom, String pass, String mail, String codepos, String prenom, int admin)
             throws SQLException, NomExisteDejaException {
         // je me place dans une transaction pour m'assurer que la sÃ©quence
         // test du nom - crÃ©ation est bien atomique et isolÃ©e
@@ -151,13 +152,14 @@ public class Utilisateur{
             // que je veux qu'il conserve les clÃ©s gÃ©nÃ©rÃ©es
             try ( PreparedStatement pst = con.prepareStatement(
                     """
-                insert into utilisateur (nom,prenom,pass,codepos,mail) values (?,?,?,?,?)
+                insert into utilisateur (nom,prenom,pass,codepos,mail,administrateur) values (?,?,?,?,?,?)
                 """, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 pst.setString(1, nom);
                 pst.setString(2, prenom);
                 pst.setString(3, pass);
                 pst.setString(4, codepos);
                 pst.setString(5, mail);
+                pst.setInt(6, admin);
                 pst.executeUpdate();
                 con.commit();
 
@@ -187,6 +189,7 @@ public class Utilisateur{
         String mdp;
         String codepostal;
         String mail;
+        int admin;
         while (existe){
             try {
                 System.out.println("Saisir un nom");
@@ -199,7 +202,10 @@ public class Utilisateur{
                 mail = Lire.S();
                 System.out.println("Saisir un code postal");
                 codepostal = Lire.S();
-                createUtilisateur(con,nom,prenom,mdp,codepostal,mail);
+                System.out.println("Est-ce un administrateur 1/0 ? ");
+                admin=Lire.i();
+                System.out.println(admin);
+                createUtilisateur(con,nom,prenom,mdp,codepostal,mail,admin);
                 existe = false;
             } catch (NomExisteDejaException ex) {
                 System.out.println("ce nom existe deja, choisissez en un autre");
