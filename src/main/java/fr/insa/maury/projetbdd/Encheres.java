@@ -44,17 +44,17 @@ public class Encheres{
     
     public static void main(String[] args) {
         int a;
-//        try ( Connection con = defautConnect()) {
-//            System.out.println("connecté !!!");
-//            Utilisateur.creeUtilisateur(con);
-//        } catch (Exception ex) {
-//            throw new Error(ex);
-//        }
+        try ( Connection con = defautConnect()) {
+            System.out.println("connecté !!!");
+            Objet.creeObjet(con);
+        } catch (Exception ex) {
+            throw new Error(ex);
+        }
         a=1;
         if(a==1){
             try ( Connection con = defautConnect()) {
                 System.out.println("connecté !!!");
-                Utilisateur.demandenouvelutilisateur(con);
+                Objet.demandenouvelobjet(con);
 //                Utilisateur.afficheTousLesUtilisateur(con);
             } catch (Exception ex) {
                 throw new Error(ex);

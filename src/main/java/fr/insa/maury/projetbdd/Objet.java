@@ -54,13 +54,14 @@ public class Objet {
                         id integer not null primary key
                         generated always as identity,
                         titre varchar(60) not null unique,
-                        quantite integer(30) not null,
+                        quantite int not null,
                         lieu varchar(20) not null,
                         codepos varchar(5) not null,
                         description varchar(500) not null,
-                        prix double() not null,                        
+                        prix int not null                      
                     )
                     """);
+            // trouver comment mettre des doubles dans la base de donnée
             con.commit();
             con.setAutoCommit(true);
         } catch (SQLException ex) {
@@ -189,29 +190,4 @@ public class Objet {
         } 
     }
     
-    public static void main(String[] args) {
-        String a;
-        try ( Connection con = defautConnect()) {
-            System.out.println("connecté !!!");
-            creeObjet(con);
-        } catch (Exception ex) {
-            throw new Error(ex);
-        }
-//        System.out.println("Voulez vous ajoutez un utilisateur ? oui/non");
-//        a=Lire.S();
-//        if(a=="oui"){
-//            try ( Connection con = defautConnect()) {
-//                System.out.println("connecté !!!");
-//                demandenouvelutilisateur(con);
-//            } catch (Exception ex) {
-//                throw new Error(ex);
-//            }
-//        }
-//        try ( Connection con = defautConnect()){
-//        deleteUtilisateur(con);
-//        System.out.println("Schema bien detruit");
-//        } catch (Exception ex) {
-//            throw new Error(ex);
-//        }
-    }
 }
