@@ -221,12 +221,33 @@ public class Utilisateur{
                 while (tlu.next()) {
                     int id = tlu.getInt("id");
                     String nom = tlu.getString(2);
-                    String pass = tlu.getString(3);
-                    System.out.println(id + " : " + nom + " (" + pass + ")");
+                    String prenom = tlu.getString(3);
+                    String pass = tlu.getString(4);
+                    String cdp = tlu.getString(5);
+                    String mail = tlu.getString(6);
+                    String administrateur = tlu.getString(7);
+                    System.out.println(id + " : " + nom + " " + prenom + " mdp (" + pass +") , code postal: " + cdp + ", mail: " + mail + ", admin: " + administrateur );
                 }
             }
         }
-
+    }
+     public static void afficheUnUtilisateur(Connection con, int id1) throws SQLException {
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from utilisateur where id = "+id1)) {
+                System.out.println("Information sur un utilisateur :");
+                System.out.println("------------------------");
+                while (tlu.next()) {
+                    int id = tlu.getInt("id");
+                    String nom = tlu.getString(2);
+                    String prenom = tlu.getString(3);
+                    String pass = tlu.getString(4);
+                    String cdp = tlu.getString(5);
+                    String mail = tlu.getString(6);
+                    String administrateur = tlu.getString(7);
+                    System.out.println(id + " : " + nom + " " + prenom + " mdp (" + pass +") , code postal: " + cdp + ", mail: " + mail + ", admin: " + administrateur );
+                }
+            }
+        }
     }
 }
 

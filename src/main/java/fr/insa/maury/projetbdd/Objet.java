@@ -58,7 +58,8 @@ public class Objet {
                         lieu varchar(20) not null,
                         codepos varchar(5) not null,
                         description varchar(500) not null,
-                        prix int not null                      
+                        prixinit int not null,
+                        prixactuel int not null
                     )
                     """);
             // trouver comment mettre des doubles dans la base de donnée
@@ -118,7 +119,7 @@ public class Objet {
     }
 
   
-    public static int createObjet(Connection con, String titre, int quantite, String lieu, String codepos, String description, double prix)
+    public static int createObjet(Connection con, String titre, int quantite, String lieu, String codepos, String description, double prixinit , double prixactuel)
             throws SQLException, TitreExisteDejaException {
         con.setAutoCommit(false);
         try ( PreparedStatement chercheTitre = con.prepareStatement(
@@ -130,14 +131,15 @@ public class Objet {
             }
             try ( PreparedStatement pst = con.prepareStatement(
                     """
-                insert into objet (titre,quantite,lieu,codepos,description,prix) values (?,?,?,?,?,?)
+                insert into objet (titre,quantite,lieu,codepos,description,prixinit,prixactuel) values (?,?,?,?,?,?,?)
                 """, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 pst.setString(1, titre);
                 pst.setInt(2, quantite);
                 pst.setString(3, lieu);
                 pst.setString(4, codepos);
                 pst.setString(5, description);
-                pst.setDouble(6, prix);
+                pst.setDouble(6, prixinit);
+                pst.setDouble(7,prixactuel);
                 pst.executeUpdate();
                 con.commit();
 
@@ -159,6 +161,30 @@ public class Objet {
             con.setAutoCommit(true);
         }
     }
+     
+        public static boolean idobjetExiste(Connection con, int id) throws SQLException {
+        try ( PreparedStatement pst = con.prepareStatement(
+                "select id from objet where id = ?")) {
+            pst.setInt(1, id);
+            ResultSet res = pst.executeQuery();
+            return res.next();
+        }
+    }
+    
+    public static int choisiObjet(Connection con) throws SQLException {
+        boolean ok = false;
+        int id = -1;
+        while (!ok) {
+            System.out.println("choix d'un objet, donner son ID");
+            id = Lire.i();
+            ok = idobjetExiste(con, id);
+            System.out.println("Id trouvé");
+            if (!ok) {
+                System.out.println("id invalide");
+            }
+        }
+        return id;
+    }
     
     public static void demandenouvelobjet(Connection con) throws SQLException{
         boolean existe = true; 
@@ -167,7 +193,8 @@ public class Objet {
         String lieu;
         String codepostal;
         String description;
-        Double prix;
+        double prixinit;
+        double prixactuel;
         while (existe){
             try {
                 System.out.println("Saisir un titre");
@@ -180,9 +207,9 @@ public class Objet {
                 codepostal = Lire.S();
                 System.out.println("Saisir un description");
                 description = Lire.S();
-                System.out.println("Saisir un prix");
-                prix = Lire.d();
-                createObjet(con,titre,quantite,lieu,codepostal,description,prix);
+                System.out.println("Saisir un prix initial et sera celui initial");
+                prixinit =prixactuel= Lire.d();
+                createObjet(con,titre,quantite,lieu,codepostal,description,prixinit,prixactuel);
                 existe = false;
             } catch (TitreExisteDejaException ex) {
                 System.out.println("Ce titre existe deja, choisissez en un autre.");
@@ -190,4 +217,24 @@ public class Objet {
         } 
     }
     
+    public static void afficheTousLesObjets(Connection con) throws SQLException {
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from objet")) {
+                System.out.println("liste des objets :");
+                System.out.println("------------------------");
+                while (tlu.next()) {
+                    int id = tlu.getInt("id");
+                    String titre = tlu.getString(2);
+                    String quantite = tlu.getString(3);
+                    String Lieu = tlu.getString(4);
+                    String cdp = tlu.getString(5);
+                    String des = tlu.getString(6);
+                    String pi = tlu.getString(7);
+                    String pa = tlu.getString(8);
+                    System.out.println(id + " : " + titre + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa );
+                }
+            }
+        }
+
+    }
 }

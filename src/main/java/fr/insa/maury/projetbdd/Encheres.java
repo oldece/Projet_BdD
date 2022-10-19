@@ -44,28 +44,36 @@ public class Encheres{
     
     public static void main(String[] args) {
         int a;
-        try ( Connection con = defautConnect()) {
-            System.out.println("connecté !!!");
-            Objet.creeObjet(con);
-        } catch (Exception ex) {
-            throw new Error(ex);
-        }
-        a=1;
-        if(a==1){
-            try ( Connection con = defautConnect()) {
-                System.out.println("connecté !!!");
-                Objet.demandenouvelobjet(con);
-//                Utilisateur.afficheTousLesUtilisateur(con);
-            } catch (Exception ex) {
-                throw new Error(ex);
-            }
-        }
+//        try ( Connection con = defautConnect()) {
+//            System.out.println("connecté !!!");
+//            Objet.creeObjet(con);
+//        } catch (Exception ex) {
+//            throw new Error(ex);
+//        }
+//        a=1;
+//        if(a==1){
+//            try ( Connection con = defautConnect()) {
+//                System.out.println("connecté !!!");
+//                Objet.demandenouvelobjet(con);
+////                Utilisateur.afficheTousLesUtilisateur(con);
+//            } catch (Exception ex) {
+//                throw new Error(ex);
+//            }
+//        }
 //        try ( Connection con = defautConnect()){
-//        Utilisateur.deleteUtilisateur(con);
+//        Objet.deleteObjet(con);
 //        System.out.println("Schema bien detruit");
 //        } catch (Exception ex) {
 //            throw new Error(ex);
 //        }
+        try ( Connection con = defautConnect()) {
+//            Objet.choisiObjet(con);
+//              Utilisateur.demandenouvelutilisateur(con);
+              int id=3;
+              Objet.afficheTousLesObjets(con);
+        } catch (Exception ex) {
+            throw new Error(ex);
+        }
     }
 }
 
