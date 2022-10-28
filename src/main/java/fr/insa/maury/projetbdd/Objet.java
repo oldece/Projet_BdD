@@ -44,7 +44,7 @@ public class Objet {
         return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "papate");
     }
     
-    public static void creeObjet(Connection con)// cree la table pour l'utilisateur 
+    public static void creeObjet(Connection con)// cree la table pour un ojbet
             throws SQLException {
         con.setAutoCommit(false);
         try ( Statement st = con.createStatement()) {
@@ -58,8 +58,9 @@ public class Objet {
                         lieu varchar(20) not null,
                         codepos varchar(5) not null,
                         description varchar(500) not null,
-                        prixinit int not null,
-                        prixactuel int not null
+                        prixinit float not null,
+                        prixactuel float not null,
+                        acheteur varchar(30) not null
                     )
                     """);
             // trouver comment mettre des doubles dans la base de donnée
@@ -119,7 +120,7 @@ public class Objet {
     }
 
   
-    public static int createObjet(Connection con, String titre, int quantite, String lieu, String codepos, String description, double prixinit , double prixactuel)
+    public static int createObjet(Connection con, String titre, int quantite, String lieu, String codepos, String description, double prixinit , double prixactuel,String acheteur )
             throws SQLException, TitreExisteDejaException {
         con.setAutoCommit(false);
         try ( PreparedStatement chercheTitre = con.prepareStatement(
@@ -131,7 +132,7 @@ public class Objet {
             }
             try ( PreparedStatement pst = con.prepareStatement(
                     """
-                insert into objet (titre,quantite,lieu,codepos,description,prixinit,prixactuel) values (?,?,?,?,?,?,?)
+                insert into objet (titre,quantite,lieu,codepos,description,prixinit,prixactuel,acheteur) values (?,?,?,?,?,?,?,?)
                 """, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 pst.setString(1, titre);
                 pst.setInt(2, quantite);
@@ -140,6 +141,7 @@ public class Objet {
                 pst.setString(5, description);
                 pst.setDouble(6, prixinit);
                 pst.setDouble(7,prixactuel);
+                pst.setString(8,acheteur);
                 pst.executeUpdate();
                 con.commit();
 
@@ -162,7 +164,7 @@ public class Objet {
         }
     }
      
-        public static boolean idobjetExiste(Connection con, int id) throws SQLException {
+    public static boolean idobjetExiste(Connection con, int id) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
                 "select id from objet where id = ?")) {
             pst.setInt(1, id);
@@ -195,6 +197,7 @@ public class Objet {
         String description;
         double prixinit;
         double prixactuel;
+        String acheteur;
         while (existe){
             try {
                 System.out.println("Saisir un titre");
@@ -209,7 +212,9 @@ public class Objet {
                 description = Lire.S();
                 System.out.println("Saisir un prix initial et sera celui initial");
                 prixinit =prixactuel= Lire.d();
-                createObjet(con,titre,quantite,lieu,codepostal,description,prixinit,prixactuel);
+                System.out.println("Saisir l'acheteur");
+                acheteur=Lire.S();
+                createObjet(con,titre,quantite,lieu,codepostal,description,prixinit,prixactuel,acheteur);
                 existe = false;
             } catch (TitreExisteDejaException ex) {
                 System.out.println("Ce titre existe deja, choisissez en un autre.");
@@ -231,10 +236,56 @@ public class Objet {
                     String des = tlu.getString(6);
                     String pi = tlu.getString(7);
                     String pa = tlu.getString(8);
-                    System.out.println(id + " : " + titre + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa );
+                    String acheteur = tlu.getString(9);
+                    System.out.println(id + " : " + titre + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
                 }
             }
         }
-
+    }public static void afficheUnObjet(Connection con,int id1) throws SQLException {
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from objet where id = "+id1)) {
+                System.out.println("Information sur l'objet:"+id1);
+                System.out.println("------------------------");
+                while (tlu.next()) {
+                    int id = tlu.getInt("id");
+                    String titre = tlu.getString(2);
+                    String quantite = tlu.getString(3);
+                    String Lieu = tlu.getString(4);
+                    String cdp = tlu.getString(5);
+                    String des = tlu.getString(6);
+                    String pi = tlu.getString(7);
+                    String pa = tlu.getString(8);
+                    String acheteur = tlu.getString(9);
+                    System.out.println(id + " : " + titre + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
+                }
+            }
+        }
+    }
+    public static double ObtenirprixObjet(Connection con,int id) throws SQLException{
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from objet where id="+id)) {
+                System.out.println("recherche un prix de l'objet "+id);
+                    double prix = tlu.getDouble(8);
+                    return prix;
+            }
+        }
+    }
+    public static void Updateprix (double nouveauprix,String acheteur){
+        try ( Connection con = defautConnect()) {
+            int id = Objet.choisiObjet(con);
+            Objet.afficheUnObjet(con, id);
+            if(nouveauprix > Objet.ObtenirprixObjet(con, id)){
+                try(PreparedStatement pst = con.prepareStatement(
+                "update Objet set prix = ?, where id ="+id)){
+                    pst.setDouble(8, nouveauprix);
+                    pst.setString(9, acheteur);
+                    pst.executeUpdate();
+                    con.commit();
+                }
+                con.setAutoCommit(true);
+            }
+        } catch (Exception ex) {
+            throw new Error(ex);
+        }
     }
 }
