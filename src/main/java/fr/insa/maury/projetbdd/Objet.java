@@ -256,36 +256,41 @@ public class Objet {
                     String pi = tlu.getString(7);
                     String pa = tlu.getString(8);
                     String acheteur = tlu.getString(9);
-                    System.out.println(id + " : " + titre + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
+                    System.out.println(id + " : " + titre + " ("+quantite+")"+ " Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
                 }
             }
         }
     }
     public static double ObtenirprixObjet(Connection con,int id) throws SQLException{
+        double prixactuelr;
+        prixactuelr=0;
         try ( Statement st = con.createStatement()) {
             try ( ResultSet tlu = st.executeQuery("select * from objet where id="+id)) {
-                System.out.println("recherche un prix de l'objet "+id);
-                    double prix = tlu.getDouble(8);
-                    return prix;
+//                System.out.println("recherche un prix de l'objet "+id);
+                while (tlu.next()) {
+                    double prixactuel = tlu.getDouble(8);
+//                    System.out.println("Prix actuel : "+prixactuel);
+                    prixactuelr=prixactuel;
+            }
             }
         }
+//        System.out.println("Prix actuel retourné :"+prixactuelr);
+        return prixactuelr;
     }
-    public static void Updateprix (double nouveauprix,String acheteur){
-        try ( Connection con = defautConnect()) {
+    
+    public static void Updateprix (Connection con,double nouveauprix,String acheteur) throws SQLException{
             int id = Objet.choisiObjet(con);
-            Objet.afficheUnObjet(con, id);
+//            Objet.afficheUnObjet(con, id);
             if(nouveauprix > Objet.ObtenirprixObjet(con, id)){
+                System.out.println("Le nouveau prix est bien supérieur à l'ancien.");
                 try(PreparedStatement pst = con.prepareStatement(
-                "update Objet set prix = ?, where id ="+id)){
-                    pst.setDouble(8, nouveauprix);
-                    pst.setString(9, acheteur);
+                "update Objet set prixactuel = ?, acheteur = ?  where id ="+id)){
+                    pst.setDouble(1, nouveauprix);
+                    pst.setString(2, acheteur);
                     pst.executeUpdate();
                     con.commit();
                 }
                 con.setAutoCommit(true);
             }
-        } catch (Exception ex) {
-            throw new Error(ex);
-        }
     }
 }

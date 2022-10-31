@@ -50,7 +50,7 @@ public class Encheres{
 //        } catch (Exception ex) {
 //            throw new Error(ex);
 //        }
-//        a=1;
+        a=1;
 //        if(a==1){
 //            try ( Connection con = defautConnect()) {
 //                System.out.println("connecté !!!");
@@ -67,10 +67,16 @@ public class Encheres{
 //            throw new Error(ex);
 //        }
         try ( Connection con = defautConnect()) {
-//            Objet.choisiObjet(con);
-//              Utilisateur.demandenouvelutilisateur(con);
-              int id=3;
-              Objet.afficheTousLesObjets(con);
+            int id;
+            id=Objet.choisiObjet(con);
+            Objet.afficheUnObjet(con, id);
+            Objet.ObtenirprixObjet(con,id);
+            Objet.afficheUnObjet(con, id);
+            System.out.println("Saisir un acheteur avec son email");
+            String Robin = Lire.S();
+            System.out.println("Saisir un prix supérieur au prix actuel");
+            double prix=Lire.d();
+            Objet.Updateprix(con,prix , Robin);
         } catch (Exception ex) {
             throw new Error(ex);
         }

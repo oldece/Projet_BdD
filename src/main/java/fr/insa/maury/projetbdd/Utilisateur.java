@@ -234,7 +234,7 @@ public class Utilisateur{
      public static void afficheUnUtilisateur(Connection con, int id1) throws SQLException {
         try ( Statement st = con.createStatement()) {
             try ( ResultSet tlu = st.executeQuery("select * from utilisateur where id = "+id1)) {
-                System.out.println("Information sur un utilisateur :");
+                System.out.println("Information sur l'utilisateur :"+id1);
                 System.out.println("------------------------");
                 while (tlu.next()) {
                     int id = tlu.getInt("id");
