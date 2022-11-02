@@ -205,7 +205,7 @@ public class Utilisateur{
                 System.out.println("Est-ce un administrateur 1/0 ? ");
                 admin=Lire.i();
                 System.out.println(admin);
-                createUtilisateur(con,nom,prenom,mdp,codepostal,mail,admin);
+                createUtilisateur(con,nom,mdp,mail,codepostal,prenom,admin);
                 existe = false;
             } catch (NomExisteDejaException ex) {
                 System.out.println("ce nom existe deja, choisissez en un autre");
@@ -249,6 +249,71 @@ public class Utilisateur{
             }
         }
     }
+     
+     public static String Obtenirmail(Connection con,int id) throws SQLException{
+        String mail="init";
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from utilisateur where id="+id)) {
+                while (tlu.next()) {
+                    mail = tlu.getString(6);
+            }
+            }
+        }
+        return mail;
+    }
+    
+    public static int Obtenirid(Connection con,String mail) throws SQLException{
+        int id=0;
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from utilisateur where mail ="+mail)) {
+                while (tlu.next()) {
+                    id = tlu.getInt("id");
+            }
+            }
+        }
+        System.out.println("Id trouvé :"+id);
+        return id;
+    }
+     
+     public static boolean Verifiemail(Connection con,String mail) throws SQLException{
+        boolean verif = false;
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from utilisateur")) {
+                 while (tlu.next()) {
+                     if(mail.equals(tlu.getString(6))){
+                         verif =true;
+                         System.out.println("L'email existe");
+                     }
+                 }
+                 if(verif == false ){
+                     System.out.println("L'email saisi ne corresspond à aucun utilisateur");
+                 }
+            }
+        }
+        return verif;
+     }
+     
+     public static boolean Verifadmin(Connection con, String mail) throws SQLException{
+         boolean verif = false;
+         int admin=0;
+         try ( Statement st = con.createStatement()) {
+            try ( ResultSet tlu = st.executeQuery("select * from utilisateur")) {
+                 while (tlu.next()) {
+                     if(mail.equals(tlu.getString(6))){
+                         admin=tlu.getInt(7);
+                            if(admin==1){
+                                System.out.println("Vous etes administrateur");
+                                verif=true;
+                            }else{
+                                System.out.println("Vous n'etes pas un administrateur");
+                            }
+                        }
+                    }
+            }
+        }
+        return verif;
+     }
+     
 }
 
 

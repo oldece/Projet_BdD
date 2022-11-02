@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 public class Encheres{
     
+    
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
             String user, String pass)
@@ -42,45 +43,8 @@ public class Encheres{
         return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "pass");
     }
     
-    public static void main(String[] args) {
-        int a;
-//        try ( Connection con = defautConnect()) {
-//            System.out.println("connecté !!!");
-//            Objet.creeObjet(con);
-//        } catch (Exception ex) {
-//            throw new Error(ex);
-//        }
-        a=1;
-//        if(a==1){
-//            try ( Connection con = defautConnect()) {
-//                System.out.println("connecté !!!");
-//                Objet.demandenouvelobjet(con);
-////                Utilisateur.afficheTousLesUtilisateur(con);
-//            } catch (Exception ex) {
-//                throw new Error(ex);
-//            }
-//        }
-//        try ( Connection con = defautConnect()){
-//        Objet.deleteObjet(con);
-//        System.out.println("Schema bien detruit");
-//        } catch (Exception ex) {
-//            throw new Error(ex);
-//        }
-        try ( Connection con = defautConnect()) {
-            int id;
-            id=Objet.choisiObjet(con);
-            Objet.afficheUnObjet(con, id);
-            Objet.ObtenirprixObjet(con,id);
-            Objet.afficheUnObjet(con, id);
-            System.out.println("Saisir un acheteur avec son email");
-            String Robin = Lire.S();
-            System.out.println("Saisir un prix supérieur au prix actuel");
-            double prix=Lire.d();
-            Objet.Updateprix(con,prix , Robin);
-        } catch (Exception ex) {
-            throw new Error(ex);
-        }
-    }
+   
 }
+
 
 

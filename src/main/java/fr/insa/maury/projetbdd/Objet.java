@@ -177,7 +177,7 @@ public class Objet {
         boolean ok = false;
         int id = -1;
         while (!ok) {
-            System.out.println("choix d'un objet, donner son ID");
+            System.out.println("Saisir un ID d'objet");
             id = Lire.i();
             ok = idobjetExiste(con, id);
             System.out.println("Id trouvé");
@@ -274,23 +274,25 @@ public class Objet {
             }
             }
         }
-//        System.out.println("Prix actuel retourné :"+prixactuelr);
+        System.out.println("Prix actuel retourné de l'objet"+id+" : "+prixactuelr);
         return prixactuelr;
     }
     
-    public static void Updateprix (Connection con,double nouveauprix,String acheteur) throws SQLException{
+    public static void Updateprix (Connection con,double nouveauprix,String mail) throws SQLException{//id1 : id de l'utilisateur qui va acheter le produit
             int id = Objet.choisiObjet(con);
-//            Objet.afficheUnObjet(con, id);
-            if(nouveauprix > Objet.ObtenirprixObjet(con, id)){
-                System.out.println("Le nouveau prix est bien supérieur à l'ancien.");
-                try(PreparedStatement pst = con.prepareStatement(
-                "update Objet set prixactuel = ?, acheteur = ?  where id ="+id)){
-                    pst.setDouble(1, nouveauprix);
-                    pst.setString(2, acheteur);
-                    pst.executeUpdate();
-                    con.commit();
-                }
-                con.setAutoCommit(true);
+            while(Utilisateur.Verifiemail(con, mail)==false){
+                System.out.println("Saisir un email valide");
+                 mail=Lire.S();
             }
+                if(nouveauprix > Objet.ObtenirprixObjet(con, id)){
+                    System.out.println("Le nouveau prix est bien supérieur à l'ancien.");
+                    try(PreparedStatement pst = con.prepareStatement(
+                    "update Objet set prixactuel = ?, acheteur = ?  where id ="+id)){
+                        pst.setDouble(1, nouveauprix);
+                        pst.setString(2, mail);
+                        pst.executeUpdate();
+                    }
+                    con.setAutoCommit(true);
+                }
     }
 }
