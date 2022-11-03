@@ -17,5 +17,36 @@
 <artifactId>postgresql</artifactId>
 <version>42.5.0</version>
 </dependency>
-</dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>18</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jfxcore</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>15-ea+1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jfxcore</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>15-ea+1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jfxcore</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>15-ea+1</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>
+
