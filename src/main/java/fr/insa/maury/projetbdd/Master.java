@@ -9,6 +9,9 @@ package fr.insa.maury.projetbdd;
  *
  * @author Robin
  */
+
+import fr.insa.vedel.javafx.projet.guiFX.Main;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -60,6 +63,7 @@ public class Master{
             System.out.println("Saisir 3 : menu des enchères");
             System.out.println("Saisir 4 : menu des administrateurs");
             System.out.println("Saisir 5 : fin de programme");
+            System.out.println("Saisir 6 : lancer l'interface graphique66");
             a1=Lire.i();
             if(a1==1){
                 System.out.println("Saisir 1 : Saisir un nouvel utilisateur");
@@ -132,6 +136,10 @@ public class Master{
                 }else{
                     System.out.println("Vous n'etes pas sorti, retour au menu");
                 }
+            }
+            if(a1==6)
+            {
+                Main.main(args);
             }
         }
     }
