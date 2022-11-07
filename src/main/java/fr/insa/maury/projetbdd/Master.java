@@ -64,6 +64,7 @@ public class Master{
             if(a1==1){
                 System.out.println("Saisir 1 : Saisir un nouvel utilisateur");
                 System.out.println("Saisir 2 : Information sur un utilisateur");
+                System.out.println("Saisir 3 : Obtenir le mail d'un utilisateur");
                 a2=Lire.i();
                 try ( Connection con = defautConnect()) {
                     if(a2==1){
@@ -75,6 +76,12 @@ public class Master{
                         id=Utilisateur.Obtenirid(con, mail);
                         Utilisateur.afficheUnUtilisateur(con, id);
                     }
+//                    if(a2==3){
+//                        System.out.println("Saisir l'id de l'utilisateur");
+//                        id=Lire.i();
+//                        mail=Utilisateur.Obtenirmail(con, id);
+//                        System.out.println("mail ="+mail);
+//                    }
                 } catch (Exception ex) {
                     throw new Error(ex);
                 }

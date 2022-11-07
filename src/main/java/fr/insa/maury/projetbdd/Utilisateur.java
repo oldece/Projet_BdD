@@ -265,10 +265,13 @@ public class Utilisateur{
     public static int Obtenirid(Connection con,String mail) throws SQLException{
         int id=0;
         try ( Statement st = con.createStatement()) {
-            try ( ResultSet tlu = st.executeQuery("select * from utilisateur where mail ="+mail)) {
-                while (tlu.next()) {
-                    id = tlu.getInt("id");
-            }
+            if(Utilisateur.Verifiemail(con, mail)==true){
+                try ( ResultSet tlu = st.executeQuery("select * from utilisateur where mail ="+mail)) {
+                    while (tlu.next()) {
+                        id = tlu.getInt("id");
+                }
+                }
+            }else{
             }
         }
         System.out.println("Id trouvé :"+id);
@@ -286,7 +289,7 @@ public class Utilisateur{
                      }
                  }
                  if(verif == false ){
-                     System.out.println("L'email saisi ne corresspond à aucun utilisateur");
+                     System.out.println("L'email saisi ne correspond à aucun utilisateur");
                  }
             }
         }
