@@ -271,7 +271,7 @@ public class Objet {
                     double prixactuel = tlu.getDouble(8);
 //                    System.out.println("Prix actuel : "+prixactuel);
                     prixactuelr=prixactuel;
-            }
+                }
             }
         }
         System.out.println("Prix actuel retourné de l'objet"+id+" : "+prixactuelr);
@@ -295,4 +295,34 @@ public class Objet {
                     con.setAutoCommit(true);
                 }
     }
+    
+    public static void deleteUnObjet(Connection con, int id) throws SQLException{
+         try ( Statement st = con.createStatement()) {
+             System.out.println("Confirmez la suppression de l'objet suivant :");
+             Objet.afficheUnObjet(con, id);
+             System.out.println("-------------------");
+             System.out.println("Tapez 1: confirmez la suppression, Tapez 2 : modifié l'ID");
+             int a= Lire.i();
+             if(a==1){
+             }else if (a==2){
+                 int b=0;
+                 while(b==0){
+                    System.out.println("Vous avez choisi de modifier l'ID de l'objet à supprimer , tapez le nouvel ID");
+                    id=Lire.i();
+                    Objet.afficheUnObjet(con, id);
+                    System.out.println("Si c'est le bon objet taper 1 sinon 0");
+                    b=Lire.i();
+                 }
+             }
+            try {
+                st.executeUpdate(
+                        """
+                    delete from objet where id=
+                    """+id);
+                System.out.println("Objet "+id+" supprimé");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the table was not created
+            }
+        }
+     }
 }

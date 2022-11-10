@@ -237,6 +237,7 @@ public class Utilisateur{
                 System.out.println("Information sur l'utilisateur :"+id1);
                 System.out.println("------------------------");
                 while (tlu.next()) {
+                    System.out.println("recolte des données");
                     int id = tlu.getInt("id");
                     String nom = tlu.getString(2);
                     String prenom = tlu.getString(3);
@@ -262,20 +263,16 @@ public class Utilisateur{
         return mail;
     }
     
-    public static int Obtenirid(Connection con,String mail) throws SQLException{
-        int id=0;
-        try ( Statement st = con.createStatement()) {
-            if(Utilisateur.Verifiemail(con, mail)==true){
-                try ( ResultSet tlu = st.executeQuery("select * from utilisateur where mail ="+mail)) {
-                    while (tlu.next()) {
-                        id = tlu.getInt("id");
-                }
-                }
-            }else{
+    public static int Obtenirid(Connection con, String mail) throws SQLException {
+        try ( PreparedStatement pst = con.prepareStatement(
+                "select id from utilisateur where mail = ? ")) {
+            pst.setString(1, mail);
+            ResultSet res = pst.executeQuery();
+            res.next();
+            int id = res.getInt("id");
+            System.out.println("IDtrouvé :"+id);
+            return id;
             }
-        }
-        System.out.println("Id trouvé :"+id);
-        return id;
     }
      
      public static boolean Verifiemail(Connection con,String mail) throws SQLException{
@@ -315,6 +312,75 @@ public class Utilisateur{
             }
         }
         return verif;
+     }
+     
+     public static boolean Verifmdp(Connection con, String mdp, String mail ) throws SQLException{
+         boolean verif = false;
+         String pass;
+           try ( Statement st = con.createStatement()) {
+                try (PreparedStatement pst = con.prepareStatement(
+                    "select pass from utilisateur where mail = ? ")) {
+                    pst.setString(1, mail);
+                    ResultSet res = pst.executeQuery();
+                    res.next();
+                    pass = res.getString("pass");
+                    if(mdp.equals(pass)){
+                        verif = true;
+                        System.out.println("Vous avez rentré le bon mot de pass");
+                    }else{
+                        System.out.println("Vous n'avez pas saisi le bon mot de passe");
+                    }
+                }
+            }
+           return verif;
+    }
+     
+     public static void deleteUnUtilisateur(Connection con, int id) throws SQLException{
+         try ( Statement st = con.createStatement()) {
+             System.out.println("Confirmez la suppression de l'utilisateur suivant :");
+             Utilisateur.afficheUnUtilisateur(con, id);
+             System.out.println("-------------------");
+             System.out.println("Tapez 1: confirmez la suppression, Tapez 2 : modifié l'ID");
+             int a= Lire.i();
+             if(a==1){
+             }else if (a==2){
+                 int b=0;
+                 while(b==0){
+                    System.out.println("Vous avez choisi de modifier l'ID de l'utilisateur à supprimer , tapez le nouvel ID");
+                    id=Lire.i();
+                    Utilisateur.afficheUnUtilisateur(con, id);
+                    System.out.println("Si c'est le bon utilisateur taper 1 sinon 0");
+                    b=Lire.i();
+                 }
+             }
+            try {
+                st.executeUpdate(
+                        """
+                    delete from utilisateur where id=
+                    """+id);
+                System.out.println("Utilisateur "+id+" supprimé");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the table was not created
+            }
+        }
+     }
+     
+     public static void UpdateUtilisateurEnAdmin(Connection con, int id) throws SQLException{
+         try ( Statement st = con.createStatement()) {
+             System.out.println("Saisir l'email de l'utilisateur à modifier le statut");
+             String mail=Lire.S();
+             if(true==Utilisateur.Verifadmin(con, mail)){
+                 System.out.println("L'utilisateur est déjà un administrateur");
+             }else{
+                 try(PreparedStatement pst = con.prepareStatement(
+                    "update utilisateur set administrateur = 1")){
+                        pst.executeUpdate();
+                    }
+                    con.setAutoCommit(true);
+                    System.out.println("Utilisateur "+id+" bien mis à jour en administrateur");
+             }
+             
+         }
      }
      
 }

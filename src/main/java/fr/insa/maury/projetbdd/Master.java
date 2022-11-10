@@ -52,27 +52,26 @@ public class Master{
         int menu=0;
         String mail;
         String nom;
+        String pass;
         boolean verif;
         double nouveauprix;
         System.out.println("Bienvenu dans le site d'enchere");
         System.out.println("-------------------------------");
-        System.out.println("Saisir les numeros suivant pour vous déplacez dans les menus : 0 = retour menu génèrale");
         while(menu==0){
             System.out.println("Saisir 1 : menu des utilisateurs");
             System.out.println("Saisir 2 : menu des objets");
             System.out.println("Saisir 3 : menu des enchères");
             System.out.println("Saisir 4 : menu des administrateurs");
             System.out.println("Saisir 5 : fin de programme");
-            System.out.println("Saisir 6 : lancer l'interface graphique66");
+            System.out.println("Saisir 6 : lancer l'interface graphique");
             a1=Lire.i();
             if(a1==1){
                 System.out.println("Saisir 1 : Saisir un nouvel utilisateur");
                 System.out.println("Saisir 2 : Information sur un utilisateur");
-                System.out.println("Saisir 3 : Obtenir le mail d'un utilisateur");
                 a2=Lire.i();
                 try ( Connection con = defautConnect()) {
                     if(a2==1){
-                        Utilisateur.creeUtilisateur(con);
+                        Utilisateur.demandenouvelutilisateur(con);
                     }
                     if(a2==2){
                         System.out.println("Saisir le mail de l'utillisateur");
@@ -80,12 +79,6 @@ public class Master{
                         id=Utilisateur.Obtenirid(con, mail);
                         Utilisateur.afficheUnUtilisateur(con, id);
                     }
-//                    if(a2==3){
-//                        System.out.println("Saisir l'id de l'utilisateur");
-//                        id=Lire.i();
-//                        mail=Utilisateur.Obtenirmail(con, id);
-//                        System.out.println("mail ="+mail);
-//                    }
                 } catch (Exception ex) {
                     throw new Error(ex);
                 }
@@ -97,14 +90,25 @@ public class Master{
                 a2=Lire.i();
                 try ( Connection con = defautConnect()) {
                     if(a2==1){
-                        Objet.creeObjet(con);
+                        Objet.demandenouvelobjet(con);
                     }
                     if(a2==2){
                         System.out.println("Saisir votre email d'utilisateur");
                         mail=Lire.S();
-                        System.out.println("Saisir votre offre pour l'objet");
-                        nouveauprix=Lire.d();
-                        Objet.Updateprix(con, nouveauprix, mail);
+                        System.out.println("Saisir votre mot de passe");
+                        pass= Lire.S();
+                        if(true==Utilisateur.Verifmdp(con, pass, mail)){
+                            System.out.println("Saisir votre offre pour l'objet");
+                            nouveauprix=Lire.d();
+                            Objet.Updateprix(con, nouveauprix, mail);
+                        }else{
+                            //ne fait rien si le mdp n'est pas bon
+                        }
+                    }
+                    if(a2==3){
+                        System.out.println("Saisir l'ID de l'objet dont vous voulez l'information");
+                        id=Lire.i();
+                        Objet.afficheUnObjet(con, id);
                     }
                 } catch (Exception ex) {
                     throw new Error(ex);
@@ -112,17 +116,42 @@ public class Master{
             }
             if(a1==3){
                 System.out.println("Saisir 1 : Information sur une enchère");
+                
             }
             if(a1==4){
                 System.out.println("Saisir votre email pour verification du statut admnistrateur ");
                 mail=Lire.S();
                 try ( Connection con = defautConnect()) {
                     verif=Utilisateur.Verifadmin(con, mail);
+                    System.out.println("Saisir votre mot de passe");
+                    pass= Lire.S();
+                if(true==Utilisateur.Verifmdp(con, pass, mail)){
                     if(verif ==true){
-                        //a coder : supprimer un utilisateur , ajouter/supprimer un administrateur,cloturer une enchere 
+                        System.out.println("Saisir 1 : Supprimer un utilisateur");
+                        System.out.println("Saisir 2 : Supprimer un objet");
+                        System.out.println("Saisir 3 : Ajouter un utilisateur en administrateur");
+                        System.out.println("Saisir 4 : Modifier une enchère");
+                        a2=Lire.i();
+                        if(a2==1){
+                            System.out.println("Taper l'ID de l'utilisateur à supprimer :");
+                            id=Lire.i();
+                            Utilisateur.deleteUnUtilisateur(con, id);
+                        } 
+                        if(a2==2){
+                            System.out.println("Taper l'ID de l'objet à supprimer :");
+                            id=Lire.i();
+                            Objet.deleteUnObjet(con, id);
+                        }
+                        if(a2==3){
+                            System.out.println("Taper l'ID de l'utilisateur à mettre à jour en administrateur");
+                            Utilisateur.UpdateUtilisateurEnAdmin(con, id);
+                        }
                     }else{
                         System.out.println("Vous n'avez pas accès à cette partie du menu");
                     }
+                }else{
+                    //ne fais rien si le mdp n'est pas bon
+                }
                 } catch (Exception ex) {
                     throw new Error(ex);
                 }
