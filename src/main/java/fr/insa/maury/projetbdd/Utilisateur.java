@@ -383,6 +383,34 @@ public class Utilisateur{
          }
      }
      
+    public static void UpdateCategorie(Connection con, String mail) throws SQLException{
+       int b=0;
+       String Cat;
+        try ( Statement st = con.createStatement()) {
+            if(true==Utilisateur.Verifadmin(con, mail)){
+              System.out.println("Saisir votre mot de passse :");
+              String mdp;
+              mdp = Lire.S();
+              while(b==0);
+                if(true==Utilisateur.Verifmdp(con, mdp, mail)){
+                    b=1;
+                    System.out.println("Saisir une nouvelle categorie");
+                    Cat = Lire.S();
+                }else{
+                    System.out.println("Vous n'avez pas saisi le bon mot de passe");
+                    System.out.println("Saisir 1 pour retour, sinon retapez votre mot de passe");
+                    mdp = Lire.S();
+                    if(mdp == "1"){
+                        b=1;
+                    }
+                }
+            }else{
+              System.out.println("Vous n'etes pas un administrateur");
+            }
+       }
+        
+    }
+     
 }
 
 

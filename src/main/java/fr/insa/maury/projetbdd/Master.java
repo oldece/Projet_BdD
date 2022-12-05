@@ -64,10 +64,12 @@ public class Master{
             System.out.println("Saisir 4 : menu des administrateurs");
             System.out.println("Saisir 5 : fin de programme");
             System.out.println("Saisir 6 : lancer l'interface graphique");
+            System.out.println("Saisir 7 : fonction de programmation");
             a1=Lire.i();
             if(a1==1){
                 System.out.println("Saisir 1 : Saisir un nouvel utilisateur");
                 System.out.println("Saisir 2 : Information sur un utilisateur");
+                System.out.println("Saisir 3 : Information sur tout les utilisateurs");
                 a2=Lire.i();
                 try ( Connection con = defautConnect()) {
                     if(a2==1){
@@ -78,6 +80,9 @@ public class Master{
                         mail=Lire.S();
                         id=Utilisateur.Obtenirid(con, mail);
                         Utilisateur.afficheUnUtilisateur(con, id);
+                    }
+                    if(a2==3){
+                        Utilisateur.afficheTousLesUtilisateur(con);
                     }
                 } catch (Exception ex) {
                     throw new Error(ex);
@@ -146,6 +151,21 @@ public class Master{
                             System.out.println("Taper l'ID de l'utilisateur à mettre à jour en administrateur");
                             Utilisateur.UpdateUtilisateurEnAdmin(con, id);
                         }
+                        if(a2==4){
+                            System.out.println("Saisir 1 : Modifier le prix initial d'une enchère");
+                            System.out.println("Saisir 2 : Modifier le vendeur d'une enchère");
+                            System.out.println("Saisir 3 : Modifier le lieu d'une enchère");
+                            a3=Lire.i();
+                            if(a3==1){
+                                
+                            }
+                            if(a3==2){
+                                
+                            }
+                            if(a3==3){
+                                
+                            }
+                        }
                     }else{
                         System.out.println("Vous n'avez pas accès à cette partie du menu");
                     }
@@ -166,9 +186,35 @@ public class Master{
                     System.out.println("Vous n'etes pas sorti, retour au menu");
                 }
             }
-            if(a1==6)
-            {
+            if(a1==6){
                 Main.main(args);
+            }
+            if(a1==7){
+                try ( Connection con = defautConnect()) {
+                System.out.println("Vous entrez dans une partie du menu de dédié au developpement");
+                System.out.println("Saisir 0 : Sortie de la partie de developpement");
+                System.out.println("Saisir 1 : Suppression des objets");
+                System.out.println("Saisir 2 : Suppression des utilisateurs");
+                System.out.println("Saisir 3 : Créer BdD objet");
+                System.out.println("Saisir 4 : Créer BdD Utilisateur");
+                a2=Lire.i();
+                if(a2==0){
+                }
+                if(a2==1){
+                    Objet.deleteObjet(con);
+                }
+                if(a3==2){
+                    Utilisateur.deleteUtilisateur(con);
+                }
+                if(a2==3){
+                    Objet.creeObjet(con);
+                }
+                if(a2==4){
+                    Utilisateur.creeUtilisateur(con);
+                }
+            }catch (Exception ex) {
+                    throw new Error(ex);
+                }
             }
         }
     }

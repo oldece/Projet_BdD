@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 
 public class Objet {
     
@@ -54,13 +56,16 @@ public class Objet {
                         id integer not null primary key
                         generated always as identity,
                         titre varchar(60) not null unique,
+                        Categorie varchar(30) not null,
+                        Mail_Vendeur varchar(50) not null,
                         quantite int not null,
                         lieu varchar(20) not null,
                         codepos varchar(5) not null,
                         description varchar(500) not null,
                         prixinit float not null,
                         prixactuel float not null,
-                        acheteur varchar(30) not null
+                        Date_de_fin date not null,
+                        acheteur varchar(60) not null
                     )
                     """);
             // trouver comment mettre des doubles dans la base de donnée
@@ -120,8 +125,8 @@ public class Objet {
     }
 
   
-    public static int createObjet(Connection con, String titre, int quantite, String lieu, String codepos, String description, double prixinit , double prixactuel,String acheteur )
-            throws SQLException, TitreExisteDejaException {
+    public static int createObjet(Connection con, String titre,String Categorie,String mailvendeur, int quantite, String lieu, String codepos, String description, double prixinit , double prixactuel , String datedefin , String acheteur)
+            throws Exception, SQLException, TitreExisteDejaException {
         con.setAutoCommit(false);
         try ( PreparedStatement chercheTitre = con.prepareStatement(
                 "select id from objet where titre = ?")) {
@@ -132,16 +137,19 @@ public class Objet {
             }
             try ( PreparedStatement pst = con.prepareStatement(
                     """
-                insert into objet (titre,quantite,lieu,codepos,description,prixinit,prixactuel,acheteur) values (?,?,?,?,?,?,?,?)
+                insert into objet (titre,Categorie,Mail_Vendeur,quantite,lieu,codepos,description,prixinit,prixactuel,Date_de_fin,acheteur) values (?,?,?,?,?,?,?,?,?,?,?)
                 """, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 pst.setString(1, titre);
-                pst.setInt(2, quantite);
-                pst.setString(3, lieu);
-                pst.setString(4, codepos);
-                pst.setString(5, description);
-                pst.setDouble(6, prixinit);
-                pst.setDouble(7,prixactuel);
-                pst.setString(8,acheteur);
+                pst.setString(2, Categorie);
+                pst.setString(3,mailvendeur);
+                pst.setInt(4, quantite);
+                pst.setString(5, lieu);
+                pst.setString(6, codepos);
+                pst.setString(7, description);
+                pst.setDouble(8, prixinit);
+                pst.setDouble(9,prixactuel);
+                pst.setDate(10,Date.valueOf(datedefin));
+                pst.setString(11,acheteur);
                 pst.executeUpdate();
                 con.commit();
 
@@ -188,20 +196,36 @@ public class Objet {
         return id;
     }
     
-    public static void demandenouvelobjet(Connection con) throws SQLException{
+    public static void demandenouvelobjet(Connection con) throws SQLException, Exception{
         boolean existe = true; 
         String titre;
         Integer quantite;
         String lieu;
         String codepostal;
         String description;
+        String categorie;
         double prixinit;
         double prixactuel;
         String acheteur;
+        String datedefin;
+        String mailvendeur;
+        int b=0;
         while (existe){
             try {
                 System.out.println("Saisir un titre");
                 titre = Lire.S();
+                System.out.println("Saisir une categorie");
+                categorie = Lire.S();
+//A ajouter verifier que la categorie existe!!!!!!!!!!---------------------------------
+                System.out.println("Saisir le mail du vendeur");
+                mailvendeur = Lire.S();
+                while(b==0){
+                    if(true==Utilisateur.Verifiemail(con, mailvendeur)){
+                        b=1;
+                    }else{
+                        System.out.println("L'email saisi n'existe pas, recommencez");
+                    }
+                }
                 System.out.println("Saisir un quantite");
                 quantite= Lire.i();
                 System.out.println("Saisir un lieu");
@@ -212,9 +236,11 @@ public class Objet {
                 description = Lire.S();
                 System.out.println("Saisir un prix initial et sera celui initial");
                 prixinit =prixactuel= Lire.d();
-                System.out.println("Saisir l'acheteur");
-                acheteur=Lire.S();
-                createObjet(con,titre,quantite,lieu,codepostal,description,prixinit,prixactuel,acheteur);
+                System.out.println("Il n'y a pas d'acheteur à la creation de l'enchère");
+                acheteur = " ";
+                System.out.println("Saisir la datedefin : aaaa-mm-jj");
+                datedefin = Lire.S();
+                createObjet(con , titre , categorie , mailvendeur, quantite , lieu , codepostal , description , prixinit , prixactuel , datedefin , acheteur);
                 existe = false;
             } catch (TitreExisteDejaException ex) {
                 System.out.println("Ce titre existe deja, choisissez en un autre.");
@@ -230,14 +256,16 @@ public class Objet {
                 while (tlu.next()) {
                     int id = tlu.getInt("id");
                     String titre = tlu.getString(2);
-                    String quantite = tlu.getString(3);
-                    String Lieu = tlu.getString(4);
-                    String cdp = tlu.getString(5);
-                    String des = tlu.getString(6);
-                    String pi = tlu.getString(7);
-                    String pa = tlu.getString(8);
-                    String acheteur = tlu.getString(9);
-                    System.out.println(id + " : " + titre + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
+                    String Categorie = tlu.getString(3);
+                    String Vendeur = tlu.getString(4);
+                    String quantite = tlu.getString(5);
+                    String Lieu = tlu.getString(6);
+                    String cdp = tlu.getString(7);
+                    String des = tlu.getString(8);
+                    String pi = tlu.getString(9);
+                    String pa = tlu.getString(10);
+                    String acheteur = tlu.getString(11);
+                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
                 }
             }
         }
@@ -247,16 +275,18 @@ public class Objet {
                 System.out.println("Information sur l'objet:"+id1);
                 System.out.println("------------------------");
                 while (tlu.next()) {
-                    int id = tlu.getInt("id");
+                     int id = tlu.getInt("id");
                     String titre = tlu.getString(2);
-                    String quantite = tlu.getString(3);
-                    String Lieu = tlu.getString(4);
-                    String cdp = tlu.getString(5);
-                    String des = tlu.getString(6);
-                    String pi = tlu.getString(7);
-                    String pa = tlu.getString(8);
-                    String acheteur = tlu.getString(9);
-                    System.out.println(id + " : " + titre + " ("+quantite+")"+ " Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
+                    String Categorie = tlu.getString(3);
+                    String Vendeur = tlu.getString(4);
+                    String quantite = tlu.getString(5);
+                    String Lieu = tlu.getString(6);
+                    String cdp = tlu.getString(7);
+                    String des = tlu.getString(8);
+                    String pi = tlu.getString(9);
+                    String pa = tlu.getString(10);
+                    String acheteur = tlu.getString(11);
+                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
                 }
             }
         }
