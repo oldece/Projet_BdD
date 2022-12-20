@@ -135,7 +135,6 @@ public class Master{
                         System.out.println("Saisir 1 : Supprimer un utilisateur");
                         System.out.println("Saisir 2 : Supprimer un objet");
                         System.out.println("Saisir 3 : Ajouter un utilisateur en administrateur");
-                        System.out.println("Saisir 4 : Modifier une enchère");
                         a2=Lire.i();
                         if(a2==1){
                             System.out.println("Taper l'ID de l'utilisateur à supprimer :");
@@ -150,21 +149,6 @@ public class Master{
                         if(a2==3){
                             System.out.println("Taper l'ID de l'utilisateur à mettre à jour en administrateur");
                             Utilisateur.UpdateUtilisateurEnAdmin(con, id);
-                        }
-                        if(a2==4){
-                            System.out.println("Saisir 1 : Modifier le prix initial d'une enchère");
-                            System.out.println("Saisir 2 : Modifier le vendeur d'une enchère");
-                            System.out.println("Saisir 3 : Modifier le lieu d'une enchère");
-                            a3=Lire.i();
-                            if(a3==1){
-                                
-                            }
-                            if(a3==2){
-                                
-                            }
-                            if(a3==3){
-                                
-                            }
                         }
                     }else{
                         System.out.println("Vous n'avez pas accès à cette partie du menu");

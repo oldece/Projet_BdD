@@ -264,8 +264,9 @@ public class Objet {
                     String des = tlu.getString(8);
                     String pi = tlu.getString(9);
                     String pa = tlu.getString(10);
-                    String acheteur = tlu.getString(11);
-                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
+                    String date = tlu.getString(11);
+                    String acheteur = tlu.getString(12);
+                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " fin d'enchère : "+date +" Acheté par :"+acheteur);
                 }
             }
         }
@@ -285,8 +286,9 @@ public class Objet {
                     String des = tlu.getString(8);
                     String pi = tlu.getString(9);
                     String pa = tlu.getString(10);
-                    String acheteur = tlu.getString(11);
-                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " Acheteur : "+acheteur);
+                   String date = tlu.getString(11);
+                    String acheteur = tlu.getString(12);
+                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " fin d'enchère : "+date +" Acheté par :"+acheteur);
                 }
             }
         }
