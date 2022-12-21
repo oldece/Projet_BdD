@@ -53,6 +53,7 @@ public class Master{
         String mail;
         String nom;
         String pass;
+        String categorie;
         boolean verif;
         double nouveauprix;
         System.out.println("Bienvenu dans le site d'enchere");
@@ -91,7 +92,7 @@ public class Master{
             if(a1==2){
                 System.out.println("Saisir 1 : Saisir un nouvel objet");
                 System.out.println("Saisir 2 : Faire une offre sur un objet");
-                System.out.println("Saisir 3 : Information sur un objet");
+                System.out.println("Saisir 3 : Information sur des objets");
                 a2=Lire.i();
                 try ( Connection con = defautConnect()) {
                     if(a2==1){
@@ -111,9 +112,19 @@ public class Master{
                         }
                     }
                     if(a2==3){
-                        System.out.println("Saisir l'ID de l'objet dont vous voulez l'information");
-                        id=Lire.i();
-                        Objet.afficheUnObjet(con, id);
+                        System.out.println("Tapez 1: recherche par categorie");
+                        System.out.println("Tapez 2: recherche par ID");
+                        a3=Lire.i();
+                        if(a3==2){
+                            System.out.println("Saisir l'ID de l'objet dont vous voulez l'information");
+                            id=Lire.i();
+                            Objet.afficheUnObjet(con, id);
+                        }
+                        if(a3==1){
+                            System.out.println("Saisir la categorie dont vous voulez tout les objets");
+                            categorie = Lire.S();
+                            Objet.afficheObjetparCategorie(con, categorie);
+                        }
                     }
                 } catch (Exception ex) {
                     throw new Error(ex);
@@ -135,6 +146,7 @@ public class Master{
                         System.out.println("Saisir 1 : Supprimer un utilisateur");
                         System.out.println("Saisir 2 : Supprimer un objet");
                         System.out.println("Saisir 3 : Ajouter un utilisateur en administrateur");
+                        System.out.println("Saisir 4 : Ajouter une categorie");
                         a2=Lire.i();
                         if(a2==1){
                             System.out.println("Taper l'ID de l'utilisateur à supprimer :");
@@ -149,6 +161,9 @@ public class Master{
                         if(a2==3){
                             System.out.println("Taper l'ID de l'utilisateur à mettre à jour en administrateur");
                             Utilisateur.UpdateUtilisateurEnAdmin(con, id);
+                        }
+                        if(a2==4){
+                            Encheres.demandenouvelcategorie(con);
                         }
                     }else{
                         System.out.println("Vous n'avez pas accès à cette partie du menu");
@@ -181,6 +196,8 @@ public class Master{
                 System.out.println("Saisir 2 : Suppression des utilisateurs");
                 System.out.println("Saisir 3 : Créer BdD objet");
                 System.out.println("Saisir 4 : Créer BdD Utilisateur");
+                System.out.println("Saisir 5 : Créer BdD Categorie");
+                System.out.println("Saisir 6 : Suppression des categories");
                 a2=Lire.i();
                 if(a2==0){
                 }
@@ -195,6 +212,12 @@ public class Master{
                 }
                 if(a2==4){
                     Utilisateur.creeUtilisateur(con);
+                }
+                if(a2==5){
+                    Encheres.creeCategorie(con);
+                }
+                if(a2==6){
+                    Encheres.deleteCategorie(con);
                 }
             }catch (Exception ex) {
                     throw new Error(ex);

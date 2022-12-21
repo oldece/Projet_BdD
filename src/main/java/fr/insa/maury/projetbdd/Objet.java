@@ -107,17 +107,7 @@ public class Objet {
                     """);
                 System.out.println("dable objet dropped");
             } catch (SQLException ex) {
-                // nothing to do : maybe the table was not created
             }
-//            try {
-//                st.executeUpdate(
-//                        """
-//                    drop table utilisateur
-//                    """);
-//                System.out.println("table utilisateur dropped");
-//            } catch (SQLException ex) {
-//                // nothing to do : maybe the table was not created
-//            }
         }
     }
     
@@ -210,13 +200,24 @@ public class Objet {
         String datedefin;
         String mailvendeur;
         int b=0;
+        int a=0;
         while (existe){
             try {
                 System.out.println("Saisir un titre");
                 titre = Lire.S();
                 System.out.println("Saisir une categorie");
                 categorie = Lire.S();
-//A ajouter verifier que la categorie existe!!!!!!!!!!---------------------------------
+                while(Encheres.VerifieCategorie(con, categorie)==false){
+                    System.out.println("Votre categorie saisi ne correspond pas au categore disponible sur le site");
+                    System.out.println("Saisir une categorie existante tapez 1, tapez 0 voir les categories");
+                    a=Lire.i();
+                    if(a==1){
+                        categorie=Lire.S();
+                    }
+                    if(a==0){
+                        Encheres.afficheTouteslesCategories(con);
+                    }
+                }
                 System.out.println("Saisir le mail du vendeur");
                 mailvendeur = Lire.S();
                 while(b==0){
@@ -270,7 +271,9 @@ public class Objet {
                 }
             }
         }
-    }public static void afficheUnObjet(Connection con,int id1) throws SQLException {
+    }
+    
+    public static void afficheUnObjet(Connection con,int id1) throws SQLException {
         try ( Statement st = con.createStatement()) {
             try ( ResultSet tlu = st.executeQuery("select * from objet where id = "+id1)) {
                 System.out.println("Information sur l'objet:"+id1);
@@ -293,6 +296,17 @@ public class Objet {
             }
         }
     }
+    
+    public static void afficheObjetparCategorie(Connection con,String categorie) throws SQLException {
+        try ( Statement st = con.createStatement()) {
+            try ( PreparedStatement pst = con.prepareStatement(
+                "select * from objet where Categorie = ?")) {
+                pst.setString(1, categorie);
+//                    A terminer   
+            }
+        }
+    }
+    
     public static double ObtenirprixObjet(Connection con,int id) throws SQLException{
         double prixactuelr;
         prixactuelr=0;

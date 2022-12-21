@@ -54,7 +54,7 @@ public class Encheres{
                         id integer not null primary key
                         generated always as identity,
                         titre varchar(60) not null unique,
-                        description varchar(500) not null,
+                        description varchar(500) not null
                     )
                     """);
             // trouver comment mettre des doubles dans la base de donnée
@@ -66,6 +66,19 @@ public class Encheres{
             throw ex;
         } finally {
             con.setAutoCommit(true);
+        }
+    }
+     
+     public static void deleteCategorie(Connection con) throws SQLException {
+        try ( Statement st = con.createStatement()) {
+            try {
+                st.executeUpdate(
+                        """
+                    drop table categorie
+                    """);
+                System.out.println("table categorie dropped");
+            } catch (SQLException ex) {
+            }
         }
     }
     
@@ -153,6 +166,7 @@ public class Encheres{
         }
         return verif;
      }
+
 }
 
 
