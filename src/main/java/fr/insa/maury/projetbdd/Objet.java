@@ -27,7 +27,126 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 
 public class Objet {
-    
+   
+public int IdObjet;
+public String titre; 
+public String Categorie;
+public String Mail_vendeur;
+public String lieu;
+public String codepos;
+public String description;
+public float prixinit;
+public float prixactuel;
+public String Date_de_fin;
+public String acheteur;
+
+public Objet(int id,String titre, String Categorie, String mail_vendeur, String lieu,String codepos,String description,float prixinit,float prixactuel,String Date_de_fin,String acheteur){
+    this.IdObjet=id ;
+    this.Categorie=Categorie;
+    this.Mail_vendeur= mail_vendeur;
+    this.Date_de_fin = Date_de_fin;
+    this.lieu=lieu;
+    this.prixactuel=prixactuel;
+    this.prixinit = prixinit;
+    this.codepos=codepos;
+    this.titre = titre;
+    this.acheteur=acheteur;
+    this.description=description;
+}
+public int getIdObjet() {
+        return IdObjet;
+    }
+
+public void setIdObjet(int id){
+    this.IdObjet=id;
+}
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public String getCategorie() {
+        return Categorie;
+    }
+
+    public void setCategorie(String Categorie) {
+        this.Categorie = Categorie;
+    }
+
+    public String getMail_vendeur() {
+        return Mail_vendeur;
+    }
+
+    public void setMail_vendeur(String Mail_vendeur) {
+        this.Mail_vendeur = Mail_vendeur;
+    }
+
+    public String getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
+    public String getCodepos() {
+        return codepos;
+    }
+
+    public void setCodepos(String codepos) {
+        this.codepos = codepos;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public float getPrixinit() {
+        return prixinit;
+    }
+
+    public void setPrixinit(float prixinit) {
+        this.prixinit = prixinit;
+    }
+
+    public float getPrixactuel() {
+        return prixactuel;
+    }
+
+    public void setPrixactuel(float prixactuel) {
+        this.prixactuel = prixactuel;
+    }
+
+    public String getDate_de_fin() {
+        return Date_de_fin;
+    }
+
+    public void setDate_de_fin(String Date_de_fin) {
+        this.Date_de_fin = Date_de_fin;
+    }
+
+    public String getAcheteur() {
+        return acheteur;
+    }
+
+    public void setAcheteur(String acheteur) {
+        this.acheteur = acheteur;
+    }
+
+    @Override
+    public String toString() {
+        return "Objet{" + "IdObjet=" + IdObjet + ", titre=" + titre + ", Categorie=" + Categorie + ", Mail_vendeur=" + Mail_vendeur + ", lieu=" + lieu + ", codepos=" + codepos + ", description=" + description + ", prixinit=" + prixinit + ", prixactuel=" + prixactuel + ", Date_de_fin=" + Date_de_fin + ", acheteur=" + acheteur + '}';
+    }
+
+
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
             String user, String pass)
@@ -56,15 +175,14 @@ public class Objet {
                         id integer not null primary key
                         generated always as identity,
                         titre varchar(60) not null unique,
-                        Categorie varchar(30) not null,
-                        Mail_Vendeur varchar(50) not null,
-                        quantite int not null,
+                        categorie varchar(30) not null,
+                        mail_vendeur varchar(50) not null,
                         lieu varchar(20) not null,
-                        codepos varchar(5) not null,
+                        codepos varchar(8) not null,
                         description varchar(500) not null,
                         prixinit float not null,
                         prixactuel float not null,
-                        Date_de_fin date not null,
+                        date_de_fin date not null,
                         acheteur varchar(60) not null
                     )
                     """);
@@ -85,24 +203,6 @@ public class Objet {
             try {
                 st.executeUpdate(
                         """
-                    alter table objet
-                        drop constraint fk_objet_u1
-                             """);
-                System.out.println("constraint fk_objet_u1 dropped");
-            } catch (SQLException ex) {
-            }
-            try {
-                st.executeUpdate(
-                        """
-                    alter table objet
-                        drop constraint fk_objet_u2
-                    """);
-                System.out.println("constraint fk_objet_u2 dropped");
-            } catch (SQLException ex) {
-            }
-            try {
-                st.executeUpdate(
-                        """
                     drop table objet
                     """);
                 System.out.println("dable objet dropped");
@@ -115,7 +215,7 @@ public class Objet {
     }
 
   
-    public static int createObjet(Connection con, String titre,String Categorie,String mailvendeur, int quantite, String lieu, String codepos, String description, double prixinit , double prixactuel , String datedefin , String acheteur)
+    public static int createObjet(Connection con, String titre,String Categorie,String mailvendeur, String lieu, String codepos, String description, double prixinit , double prixactuel , String datedefin , String acheteur)
             throws Exception, SQLException, TitreExisteDejaException {
         con.setAutoCommit(false);
         try ( PreparedStatement chercheTitre = con.prepareStatement(
@@ -127,19 +227,18 @@ public class Objet {
             }
             try ( PreparedStatement pst = con.prepareStatement(
                     """
-                insert into objet (titre,Categorie,Mail_Vendeur,quantite,lieu,codepos,description,prixinit,prixactuel,Date_de_fin,acheteur) values (?,?,?,?,?,?,?,?,?,?,?)
+                insert into objet (titre,categorie,mail_vendeur,lieu,codepos,description,prixinit,prixactuel,Date_de_fin,acheteur) values (?,?,?,?,?,?,?,?,?,?)
                 """, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 pst.setString(1, titre);
                 pst.setString(2, Categorie);
                 pst.setString(3,mailvendeur);
-                pst.setInt(4, quantite);
-                pst.setString(5, lieu);
-                pst.setString(6, codepos);
-                pst.setString(7, description);
-                pst.setDouble(8, prixinit);
-                pst.setDouble(9,prixactuel);
-                pst.setDate(10,Date.valueOf(datedefin));
-                pst.setString(11,acheteur);
+                pst.setString(4, lieu);
+                pst.setString(5, codepos);
+                pst.setString(6, description);
+                pst.setDouble(7, prixinit);
+                pst.setDouble(8,prixactuel);
+                pst.setDate(9,Date.valueOf(datedefin));
+                pst.setString(10,acheteur);
                 pst.executeUpdate();
                 con.commit();
 
@@ -227,8 +326,6 @@ public class Objet {
                         System.out.println("L'email saisi n'existe pas, recommencez");
                     }
                 }
-                System.out.println("Saisir un quantite");
-                quantite= Lire.i();
                 System.out.println("Saisir un lieu");
                 lieu = Lire.S();
                 System.out.println("Saisir un code postal");
@@ -241,7 +338,7 @@ public class Objet {
                 acheteur = " ";
                 System.out.println("Saisir la datedefin : aaaa-mm-jj");
                 datedefin = Lire.S();
-                createObjet(con , titre , categorie , mailvendeur, quantite , lieu , codepostal , description , prixinit , prixactuel , datedefin , acheteur);
+                createObjet(con , titre , categorie , mailvendeur, lieu , codepostal , description , prixinit , prixactuel , datedefin , acheteur);
                 existe = false;
             } catch (TitreExisteDejaException ex) {
                 System.out.println("Ce titre existe deja, choisissez en un autre.");
@@ -297,14 +394,20 @@ public class Objet {
         }
     }
     
-    public static void afficheObjetparCategorie(Connection con,String categorie) throws SQLException {
+    public static ArrayList<Objet> afficheObjetparCategorie(Connection con,String categorie) throws SQLException {
+        ArrayList<Objet> res = new ArrayList<>();
         try ( Statement st = con.createStatement()) {
             try ( PreparedStatement pst = con.prepareStatement(
-                "select * from objet where Categorie = ?")) {
+                "select * from objet where categorie = ?")) {
                 pst.setString(1, categorie);
-//                    A terminer   
+                try(ResultSet rs = pst.executeQuery()){
+                    while(rs.next()){
+                        res.add(new Objet(rs.getInt("id"),rs.getString("titre"),rs.getString("categorie"),rs.getString("mail_vendeur"),rs.getString("codepos"),rs.getString("lieu"),rs.getString("description"),rs.getFloat("prixinit"),rs.getFloat("prixactuel"),rs.getString("date_de_fin"),rs.getString("acheteur")));
+                    }
+                }
             }
         }
+        return res;
     }
     
     public static double ObtenirprixObjet(Connection con,int id) throws SQLException{

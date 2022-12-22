@@ -123,7 +123,7 @@ public class Master{
                         if(a3==1){
                             System.out.println("Saisir la categorie dont vous voulez tout les objets");
                             categorie = Lire.S();
-                            Objet.afficheObjetparCategorie(con, categorie);
+                            System.out.println(Objet.afficheObjetparCategorie(con, categorie));
                         }
                     }
                 } catch (Exception ex) {
