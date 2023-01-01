@@ -54,6 +54,7 @@ public class Master{
         String nom;
         String pass;
         String categorie;
+        String acheteur;
         boolean verif;
         double nouveauprix;
         System.out.println("Bienvenu dans le site d'enchere");
@@ -61,7 +62,6 @@ public class Master{
         while(menu==0){
             System.out.println("Saisir 1 : menu des utilisateurs");
             System.out.println("Saisir 2 : menu des objets");
-            System.out.println("Saisir 3 : menu des enchères");
             System.out.println("Saisir 4 : menu des administrateurs");
             System.out.println("Saisir 5 : fin de programme");
             System.out.println("Saisir 6 : lancer l'interface graphique");
@@ -114,6 +114,7 @@ public class Master{
                     if(a2==3){
                         System.out.println("Tapez 1: recherche par categorie");
                         System.out.println("Tapez 2: recherche par ID");
+                        System.out.println("Tapez 3 : recherche par Acheteur");
                         a3=Lire.i();
                         if(a3==2){
                             System.out.println("Saisir l'ID de l'objet dont vous voulez l'information");
@@ -125,14 +126,15 @@ public class Master{
                             categorie = Lire.S();
                             System.out.println(Objet.afficheObjetparCategorie(con, categorie));
                         }
+                        if(a3==3){
+                            System.out.println("Saisir le mail de l'Utilisateur");
+                            acheteur=Lire.S();
+                            System.out.println(Objet.afficheObjetparAcheteur(con, acheteur));
+                        }
                     }
                 } catch (Exception ex) {
                     throw new Error(ex);
                 }
-            }
-            if(a1==3){
-                System.out.println("Saisir 1 : Information sur une enchère");
-                
             }
             if(a1==4){
                 System.out.println("Saisir votre email pour verification du statut admnistrateur ");

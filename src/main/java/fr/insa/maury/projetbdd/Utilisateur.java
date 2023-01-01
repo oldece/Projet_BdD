@@ -24,6 +24,74 @@ import java.util.logging.Logger;
 
 public class Utilisateur{
     
+    public int id;
+    public String nom;
+    public String prenom;
+    public String pass;
+    public String codepos;
+    public String mail;
+    public int administrateur;
+    
+    public Utilisateur(int id, String nom, String prenom, String pass, String codepos, String mail,int administrateur){
+        this.id=id;
+        this.nom=nom;
+        this.prenom=prenom;
+        this.pass=pass;
+        this.mail=mail;
+        this.codepos=codepos;
+        this.administrateur=administrateur;
+    }
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getNom() {
+        return nom;
+    }
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+    public String getPrenom() {
+        return prenom;
+    }
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+    public String getPass() {
+        return pass;
+    }
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+    public String getCodepos() {
+        return codepos;
+    }
+    public void setCodepos(String codepos) {
+        this.codepos = codepos;
+    }
+    public String getMail() {
+        return mail;
+    }
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+    public int getAdministrateur() {
+        return administrateur;
+    }
+    public void setAdministrateur(int administrateur) {
+        this.administrateur = administrateur;
+    }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", pass=" + pass + ", codepos=" + codepos + ", mail=" + mail + ", administrateur=" + administrateur + '}';
+    }
+    
+   
+    
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
             String user, String pass)
@@ -51,7 +119,7 @@ public class Utilisateur{
                     create table utilisateur (
                         id integer not null primary key
                         generated always as identity,
-                        nom varchar(30) not null unique,
+                        nom varchar(30) not null ,
                         prenom varchar(30) not null,
                         pass varchar(20) not null,
                         codepos varchar(5) not null,
@@ -175,6 +243,7 @@ public class Utilisateur{
             }
         }
     }
+     
      public static void afficheUnUtilisateur(Connection con, int id1) throws SQLException {
         try ( Statement st = con.createStatement()) {
             try ( ResultSet tlu = st.executeQuery("select * from utilisateur where id = "+id1)) {
@@ -205,7 +274,7 @@ public class Utilisateur{
             }
         }
         return mail;
-    }
+    } //Obtient le mail d'un utilisateur en fonction de son id 
     
     public static int Obtenirid(Connection con, String mail) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
@@ -217,7 +286,7 @@ public class Utilisateur{
             System.out.println("IDtrouvé :"+id);
             return id;
             }
-    }
+    } //Obtient l'ID d'un utiliateur en fonction de son mail 
      
      public static boolean Verifiemail(Connection con,String mail) throws SQLException{
         boolean verif = false;
@@ -235,7 +304,7 @@ public class Utilisateur{
             }
         }
         return verif;
-     }
+     }  // Verifie si l'email existe 
      
      public static boolean Verifadmin(Connection con, String mail) throws SQLException{
          boolean verif = false;
@@ -256,7 +325,7 @@ public class Utilisateur{
             }
         }
         return verif;
-     }
+     } //Verifie si l'utilisateur est un administrateur avec l'email
      
      public static boolean Verifmdp(Connection con, String mdp, String mail ) throws SQLException{
          boolean verif = false;
@@ -277,7 +346,7 @@ public class Utilisateur{
                 }
             }
            return verif;
-    }
+    } // Verifie le mot de passe
      
      public static void deleteUnUtilisateur(Connection con, int id) throws SQLException{
          try ( Statement st = con.createStatement()) {
@@ -307,7 +376,7 @@ public class Utilisateur{
                 // nothing to do : maybe the table was not created
             }
         }
-     }
+     } // Supprime un utilisateur a partir de son id 
      
      public static void UpdateUtilisateurEnAdmin(Connection con, int id) throws SQLException{
          try ( Statement st = con.createStatement()) {
@@ -325,7 +394,7 @@ public class Utilisateur{
              }
              
          }
-     }
+     } //Permet à un administrateur de passer un utilisateur en administrateur
      
     public static void UpdateCategorie(Connection con, String mail) throws SQLException{
        int b=0;
@@ -353,7 +422,7 @@ public class Utilisateur{
             }
        }
         
-    }
+    } //Permet a un administrateur d'ajouter une categorie sur le site
      
 }
 

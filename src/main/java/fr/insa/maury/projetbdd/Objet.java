@@ -268,7 +268,7 @@ public void setIdObjet(int id){
             ResultSet res = pst.executeQuery();
             return res.next();
         }
-    }
+    } // Verifie que l'ID d'un Objet existe 
     
     public static int choisiObjet(Connection con) throws SQLException {
         boolean ok = false;
@@ -283,7 +283,7 @@ public void setIdObjet(int id){
             }
         }
         return id;
-    }
+    } // D'un point de vue utilisateur, redemande un ID si celui saisi n'existe pas
     
     public static void demandenouvelobjet(Connection con) throws SQLException, Exception{
         boolean existe = true; 
@@ -400,6 +400,22 @@ public void setIdObjet(int id){
             try ( PreparedStatement pst = con.prepareStatement(
                 "select * from objet where categorie = ?")) {
                 pst.setString(1, categorie);
+                try(ResultSet rs = pst.executeQuery()){
+                    while(rs.next()){
+                        res.add(new Objet(rs.getInt("id"),rs.getString("titre"),rs.getString("categorie"),rs.getString("mail_vendeur"),rs.getString("codepos"),rs.getString("lieu"),rs.getString("description"),rs.getFloat("prixinit"),rs.getFloat("prixactuel"),rs.getString("date_de_fin"),rs.getString("acheteur")));
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    
+    public static ArrayList<Objet> afficheObjetparAcheteur(Connection con,String acheteur) throws SQLException {
+        ArrayList<Objet> res = new ArrayList<>();
+        try ( Statement st = con.createStatement()) {
+            try ( PreparedStatement pst = con.prepareStatement(
+                "select * from objet where acheteur = ?")) {
+                pst.setString(1, acheteur);
                 try(ResultSet rs = pst.executeQuery()){
                     while(rs.next()){
                         res.add(new Objet(rs.getInt("id"),rs.getString("titre"),rs.getString("categorie"),rs.getString("mail_vendeur"),rs.getString("codepos"),rs.getString("lieu"),rs.getString("description"),rs.getFloat("prixinit"),rs.getFloat("prixactuel"),rs.getString("date_de_fin"),rs.getString("acheteur")));
