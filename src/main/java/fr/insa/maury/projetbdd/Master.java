@@ -62,22 +62,22 @@ public class Master{
         while(menu==0){
             System.out.println("Saisir 1 : menu des utilisateurs");
             System.out.println("Saisir 2 : menu des objets");
-            System.out.println("Saisir 4 : menu des administrateurs");
-            System.out.println("Saisir 5 : fin de programme");
-            System.out.println("Saisir 6 : lancer l'interface graphique");
-            System.out.println("Saisir 7 : fonction de programmation");
+            System.out.println("Saisir 3 : menu des administrateurs");
+            System.out.println("Saisir 4 : fin de programme");
+            System.out.println("Saisir 5 : lancer l'interface graphique");
+            System.out.println("Saisir 6 : fonction de programmation");
             a1=Lire.i();
             if(a1==1){
                 System.out.println("Saisir 1 : Saisir un nouvel utilisateur");
                 System.out.println("Saisir 2 : Information sur un utilisateur");
-                System.out.println("Saisir 3 : Information sur tout les utilisateurs");
+                System.out.println("Saisir 3 : Information sur tous les utilisateurs");
                 a2=Lire.i();
                 try ( Connection con = defautConnect()) {
                     if(a2==1){
                         Utilisateur.demandenouvelutilisateur(con);
                     }
                     if(a2==2){
-                        System.out.println("Saisir le mail de l'utillisateur");
+                        System.out.println("Saisir le mail de l'utilisateur");
                         mail=Lire.S();
                         id=Utilisateur.Obtenirid(con, mail);
                         Utilisateur.afficheUnUtilisateur(con, id);
@@ -136,7 +136,7 @@ public class Master{
                     throw new Error(ex);
                 }
             }
-            if(a1==4){
+            if(a1==3){
                 System.out.println("Saisir votre email pour verification du statut admnistrateur ");
                 mail=Lire.S();
                 try ( Connection con = defautConnect()) {
@@ -177,7 +177,7 @@ public class Master{
                     throw new Error(ex);
                 }
             }
-            if(a1==5){
+            if(a1==4){
                 System.out.println("Confirmez la sortie de programme, tapez 1");
                 a2=Lire.i();
                 if(a2==1){
@@ -187,12 +187,12 @@ public class Master{
                     System.out.println("Vous n'etes pas sorti, retour au menu");
                 }
             }
-            if(a1==6){
+            if(a1==5){
                 Main.main(args);
             }
-            if(a1==7){
+            if(a1==6){
                 try ( Connection con = defautConnect()) {
-                System.out.println("Vous entrez dans une partie du menu de dédié au developpement");
+                System.out.println("Vous entrez dans une partie du menu de dédié au developpement : Créatin et suppression des tableaux BdD");
                 System.out.println("Saisir 0 : Sortie de la partie de developpement");
                 System.out.println("Saisir 1 : Suppression des objets");
                 System.out.println("Saisir 2 : Suppression des utilisateurs");

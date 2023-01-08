@@ -122,7 +122,7 @@ public class Utilisateur{
                         nom varchar(30) not null ,
                         prenom varchar(30) not null,
                         pass varchar(20) not null,
-                        codepos varchar(5) not null,
+                        codepos varchar(8) not null,
                         mail varchar(100) not null unique,
                         administrateur int not null
                     )

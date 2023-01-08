@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package fr.insa.maury.projetbdd;
 
 import static fr.insa.maury.projetbdd.Encheres.defautConnect;
@@ -23,8 +20,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.SimpleDateFormat;
 import java.sql.Date;
+
+import fr.insa.maury.projetbdd.Lire;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import java.sql.SQLException;
 
 public class Objet {
    
