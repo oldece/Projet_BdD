@@ -55,6 +55,7 @@ public class Master{
         String pass;
         String categorie;
         String acheteur;
+        String mot;
         boolean verif;
         double nouveauprix;
         System.out.println("Bienvenu dans le site d'enchere");
@@ -112,10 +113,15 @@ public class Master{
                         }
                     }
                     if(a2==3){
+                        System.out.println("Tapez 0 : Affiche tous les Objets");
                         System.out.println("Tapez 1: recherche par categorie");
                         System.out.println("Tapez 2: recherche par ID");
                         System.out.println("Tapez 3 : recherche par Acheteur");
+                        System.out.println("Tapez 4 : recherche par mot dans la description");
                         a3=Lire.i();
+                        if(a3==0){
+                            Objet.afficheTousLesObjets(con);
+                        }
                         if(a3==2){
                             System.out.println("Saisir l'ID de l'objet dont vous voulez l'information");
                             id=Lire.i();
@@ -130,6 +136,11 @@ public class Master{
                             System.out.println("Saisir le mail de l'Utilisateur");
                             acheteur=Lire.S();
                             System.out.println(Objet.afficheObjetparAcheteur(con, acheteur));
+                        }
+                        if(a3==4){
+                             System.out.println("Saisir le mot présent dans la déscription dont vous voulez tout les objets");
+                             mot=Lire.S();
+                             System.out.println(Objet.afficheObjetparDescription(con, mot));
                         }
                     }
                 } catch (Exception ex) {

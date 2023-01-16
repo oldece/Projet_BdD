@@ -325,6 +325,7 @@ public void setIdObjet(int id){
                 System.out.println("Saisir le mail du vendeur");
                 mailvendeur = Lire.S();
                 while(b==0){
+                    mailvendeur = Lire.S();
                     if(true==Utilisateur.Verifiemail(con, mailvendeur)){
                         b=1;
                     }else{
@@ -361,15 +362,14 @@ public void setIdObjet(int id){
                     String titre = tlu.getString(2);
                     String Categorie = tlu.getString(3);
                     String Vendeur = tlu.getString(4);
-                    String quantite = tlu.getString(5);
-                    String Lieu = tlu.getString(6);
-                    String cdp = tlu.getString(7);
-                    String des = tlu.getString(8);
-                    String pi = tlu.getString(9);
-                    String pa = tlu.getString(10);
-                    String date = tlu.getString(11);
-                    String acheteur = tlu.getString(12);
-                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " fin d'enchère : "+date +" Acheté par :"+acheteur);
+                    String Lieu = tlu.getString(5);
+                    String cdp = tlu.getString(6);
+                    String des = tlu.getString(7);
+                    String pi = tlu.getString(8);
+                    String pa = tlu.getString(9);
+                    String date = tlu.getString(10);
+                    String acheteur = tlu.getString(11);
+                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + " Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par "+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " fin d'enchère : "+date +" Acheté par :"+acheteur);
                 }
             }
         }
@@ -381,19 +381,18 @@ public void setIdObjet(int id){
                 System.out.println("Information sur l'objet:"+id1);
                 System.out.println("------------------------");
                 while (tlu.next()) {
-                     int id = tlu.getInt("id");
+                    int id = tlu.getInt("id");
                     String titre = tlu.getString(2);
                     String Categorie = tlu.getString(3);
                     String Vendeur = tlu.getString(4);
-                    String quantite = tlu.getString(5);
-                    String Lieu = tlu.getString(6);
-                    String cdp = tlu.getString(7);
-                    String des = tlu.getString(8);
-                    String pi = tlu.getString(9);
-                    String pa = tlu.getString(10);
-                   String date = tlu.getString(11);
-                    String acheteur = tlu.getString(12);
-                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + "("+quantite+")"+ "Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par"+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " fin d'enchère : "+date +" Acheté par :"+acheteur);
+                    String Lieu = tlu.getString(5);
+                    String cdp = tlu.getString(6);
+                    String des = tlu.getString(7);
+                    String pi = tlu.getString(8);
+                    String pa = tlu.getString(9);
+                    String date = tlu.getString(10);
+                    String acheteur = tlu.getString(11);
+                    System.out.println(id + " : " + titre + " dans la categorie :" + Categorie + " Lieu: " + Lieu +" Code postal : " + cdp + " Description :"+ des +" vendu par "+ Vendeur + " Prix intial : " + pi + " Prix actuel: "+ pa + " fin d'enchère : "+date +" Acheté par :"+acheteur);
                 }
             }
         }
@@ -414,6 +413,24 @@ public void setIdObjet(int id){
         }
         return res;
     }
+    
+     public static ArrayList<Objet> afficheObjetparDescription(Connection con,String mot) throws SQLException {
+         ArrayList<Objet> res = new ArrayList<>();
+        try ( Statement st = con.createStatement()) {
+            try ( PreparedStatement pst = con.prepareStatement(
+                "select * from objet where description = ?")) {
+                mot="%"+mot+"%";
+                System.out.println(mot);
+                pst.setString(1, mot);
+                try(ResultSet rs = pst.executeQuery()){
+                    while(rs.next()){
+                        res.add(new Objet(rs.getInt("id"),rs.getString("titre"),rs.getString("categorie"),rs.getString("mail_vendeur"),rs.getString("codepos"),rs.getString("lieu"),rs.getString("description"),rs.getFloat("prixinit"),rs.getFloat("prixactuel"),rs.getString("date_de_fin"),rs.getString("acheteur")));
+                    }
+                }
+            }
+        }
+        return res;
+     }
     
     public static ArrayList<Objet> afficheObjetparAcheteur(Connection con,String acheteur) throws SQLException {
         ArrayList<Objet> res = new ArrayList<>();
